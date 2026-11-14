@@ -8,15 +8,19 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      // Cada usuario puede leer su propio perfil. No se permite cambiar roles desde la web.
       allow get: if request.auth != null && (request.auth.uid == userId || isAdmin());
       allow list, create, update, delete: if false;
     }
 
-    match /flights/{flightId} {
-      // El panel público puede consultar los vuelos.
+    match /notices/{noticeId} {
+      // El panel público puede leer el aviso actual.
       allow read: if true;
-      // Solo usuarios cuyo documento users/{uid} tenga role == "admin".
+      // Solo administradores pueden publicar o retirar avisos.
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /flights/{flightId} {
+      allow read: if true;
       allow create, update, delete: if isAdmin();
     }
   }
