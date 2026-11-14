@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#071321"><title>Avi-n · Salidas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:dark;--bg:#071321;--panel:#0e2032;--line:#20364a;--muted:#8da2b7;--text:#f4f8fc;--cyan:#53d6e8;--lime:#a7e6a1}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% -10%,#173c53 0,transparent 38%),var(--bg);color:var(--text);font-family:Manrope,Arial,sans-serif;min-height:100vh}
+    .wrap{max-width:1440px;margin:auto;padding:34px clamp(18px,4vw,58px) 54px}.top{display:flex;justify-content:space-between;align-items:center;gap:18px;border-bottom:1px solid var(--line);padding-bottom:24px}
+    .brand{display:flex;align-items:center;gap:13px}.mark{width:46px;height:46px;border:1px solid #37627a;border-radius:14px;display:grid;place-items:center;color:var(--cyan);font-size:23px;background:#102a3d}
+    .eyebrow{font:11px 'DM Mono',monospace;letter-spacing:2px;color:var(--cyan);text-transform:uppercase}.brand h1{font-size:21px;margin:3px 0 0;letter-spacing:-.6px}
+    .clock{text-align:right;font:500 20px 'DM Mono',monospace}.clock small{display:block;font:11px Manrope,sans-serif;color:var(--muted);margin-top:5px}
+    .heading{display:flex;justify-content:space-between;align-items:end;margin:38px 0 22px;gap:16px}.heading h2{font-size:clamp(27px,4vw,42px);letter-spacing:-1.8px;margin:0}.heading p{color:var(--muted);margin:8px 0 0;font-size:13px}
+    .live{display:flex;align-items:center;gap:8px;color:var(--lime);font:11px 'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase}.dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime)}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}.stat{background:linear-gradient(145deg,#122b40,#0b1b2b);border:1px solid var(--line);border-radius:14px;padding:17px 20px}.stat span{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px}.stat strong{display:block;font:26px 'DM Mono',monospace;margin-top:8px}
+    .board{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(10,25,40,.86)}.board-head{padding:17px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}.board-head h3{margin:0;font-size:13px;letter-spacing:1px;text-transform:uppercase}.board-head span{font:11px 'DM Mono',monospace;color:var(--muted)}
+    .table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:720px}th{text-align:left;padding:14px 20px;color:#7891a8;font:10px 'DM Mono',monospace;letter-spacing:1.3px;text-transform:uppercase;background:#0b1a29}td{padding:17px 20px;border-top:1px solid #1a3043;font-size:13px}tbody tr:hover{background:#10263a}.flight{font:600 14px 'DM Mono',monospace;color:var(--cyan)}.time{font:500 18px 'DM Mono',monospace}.destination{font-weight:700}.airline{color:var(--muted);font-size:11px;margin-top:3px}.gate{font:500 14px 'DM Mono',monospace}
+    .status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:7px;font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}.status:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}.s-boarding{color:#f7c66b;background:#f7c66b18}.s-ontime{color:#8fdda5;background:#8fdda518}.s-delayed{color:#ff9c82;background:#ff9c8218}.s-departed{color:#8ca8c1;background:#8ca8c118}.s-cancelled{color:#ff8585;background:#ff858518}
+    .empty{padding:56px 20px;text-align:center;color:var(--muted);font-size:13px}.empty b{display:block;color:var(--text);font-size:16px;margin-bottom:7px}.foot{display:flex;justify-content:space-between;gap:14px;margin-top:18px;color:#71869a;font-size:10px}.foot a{color:var(--muted);text-decoration:none}.foot a:hover{color:var(--cyan)}
+    @media(max-width:650px){.wrap{padding-top:22px}.top{align-items:flex-start}.clock{font-size:16px}.heading{align-items:flex-start;flex-direction:column}.stats{gap:7px}.stat{padding:13px 11px}.stat span{font-size:9px}.stat strong{font-size:21px}.foot{flex-direction:column}}
+  </style>
+</head>
+<body><main class="wrap">
+  <header class="top"><div class="brand"><div class="mark">✈</div><div><div class="eyebrow">Avi-n · Terminal de salidas</div><h1>Información de vuelos</h1></div></div><div class="clock"><span id="clock">--:--:--</span><small id="today">Cargando fecha…</small></div></header>
+  <section class="heading"><div><div class="eyebrow">Panel de información · Departures</div><h2>Vuelos de salida</h2><p>Consulta los horarios y el estado actualizado de cada vuelo.</p></div><div class="live"><i class="dot"></i> Actualización en directo</div></section>
+  <section class="stats"><div class="stat"><span>Vuelos mostrados</span><strong id="total">—</strong></div><div class="stat"><span>Embarcando</span><strong id="boarding">—</strong></div><div class="stat"><span>Con retraso</span><strong id="delayed">—</strong></div></section>
+  <section class="board"><div class="board-head"><h3>Próximas salidas</h3><span id="updated">CONECTANDO CON FIREBASE…</span></div><div class="table-wrap"><table><thead><tr><th>Vuelo</th><th>Destino</th><th>Hora</th><th>Puerta</th><th>Estado</th></tr></thead><tbody id="flights"><tr><td colspan="5" class="empty">Conectando con la base de datos…</td></tr></tbody></table></div></section>
+  <footer class="foot"><span>Los horarios se muestran en la hora local del dispositivo.</span><a href="admin.html">Acceso de administración ↗</a></footer>
+</main>
+<script type="module">
+import { db } from './firebase-config.js';
+import { collection, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+const body=document.getElementById('flights');
+const labels={boarding:'Embarcando',ontime:'A tiempo',delayed:'Retrasado',departed:'Despegado',cancelled:'Cancelado'};
+function updateClock(){const now=new Date();document.getElementById('clock').textContent=new Intl.DateTimeFormat('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(now);document.getElementById('today').textContent=new Intl.DateTimeFormat('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now)}
+updateClock();setInterval(updateClock,1000);
+function safe(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function formatTime(value){if(!value)return '—';const d=new Date(value);return Number.isNaN(d.getTime())?safe(value):new Intl.DateTimeFormat('es-ES',{hour:'2-digit',minute:'2-digit'}).format(d)}
+onSnapshot(query(collection(db,'flights'),orderBy('departureTime','asc')),(snapshot)=>{
+ const flights=snapshot.docs.map(doc=>({id:doc.id,...doc.data()}));
+ document.getElementById('total').textContent=flights.length;
+ document.getElementById('boarding').textContent=flights.filter(f=>f.status==='boarding').length;
+ document.getElementById('delayed').textContent=flights.filter(f=>f.status==='delayed').length;
+ document.getElementById('updated').textContent='ACTUALIZADO '+new Intl.DateTimeFormat('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date());
+ if(!flights.length){body.innerHTML='<tr><td colspan="5" class="empty"><b>No hay vuelos programados</b>Los nuevos vuelos aparecerán aquí cuando se añadan desde administración.</td></tr>';return}
+ body.innerHTML=flights.map(f=>{const s=labels[f.status]?f.status:'ontime';return '<tr><td><div class="flight">'+safe(f.flightNumber)+'</div><div class="airline">'+safe(f.airline)+'</div></td><td><div class="destination">'+safe(f.destination)+'</div></td><td><div class="time">'+formatTime(f.departureTime)+'</div></td><td><div class="gate">'+safe(f.gate||'—')+'</div></td><td><span class="status s-'+s+'">'+labels[s]+'</span></td></tr>'}).join('');
+},(error)=>{console.error(error);body.innerHTML='<tr><td colspan="5" class="empty"><b>No se pueden cargar los vuelos</b>Comprueba la configuración y las reglas de Firestore.</td></tr>';document.getElementById('updated').textContent='ERROR DE CONEXIÓN'});
+</script></body></html>
