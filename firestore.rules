@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /flights/{flightId} {
+      // El panel público puede consultar los vuelos.
+      allow read: if true;
+      // Solo usuarios autenticados con custom claim admin=true pueden modificarlos.
+      allow create, update, delete: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+  }
+}
