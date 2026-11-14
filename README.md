@@ -3,26 +3,24 @@
 Aplicación web con dos páginas HTML y Firebase Firestore en tiempo real.
 
 ## Archivos
-- `index.html`: panel público de vuelos.
-- `admin.html`: inicio de sesión y gestión de vuelos (crear, editar y eliminar).
+- `index.html`: panel público de vuelos y avisos a pantalla completa.
+- `admin.html`: inicio de sesión, gestión de vuelos y avisos.
 - `firebase-config.js`: configuración compartida de Firebase.
 - `firestore.rules`: reglas de acceso de Firestore.
 
 ## Puesta en marcha
-1. En Firebase Console abre el proyecto `avion-a2b5e`.
-2. Crea una base de datos Cloud Firestore.
-3. En Authentication habilita el proveedor **Correo electrónico/Contraseña** y crea el usuario administrador.
-4. Copia el UID de ese usuario desde Authentication > Users.
-5. En Firestore Database > Datos, crea la colección `users`. Dentro, crea un documento cuyo ID sea exactamente el UID copiado. Añade el campo:
-   - Nombre: `role`
-   - Tipo: `string`
-   - Valor: `admin`
-6. Despliega el contenido de `firestore.rules` en Firestore (pestaña Reglas) y pulsa **Publicar**.
-7. Publica los archivos con un servidor estático (por ejemplo GitHub Pages o Firebase Hosting). No abras los HTML como `file://`; los módulos JavaScript necesitan un servidor HTTP/HTTPS.
-8. Entra en `admin.html` con el correo y contraseña del usuario. Si ya estaba conectado, cierra sesión y vuelve a entrar.
+1. En Firebase Console abre el proyecto `avion-a2b5e` y crea Cloud Firestore.
+2. En Authentication habilita **Correo electrónico/Contraseña** y crea el usuario administrador.
+3. Copia su UID desde Authentication > Users.
+4. En Firestore crea `users/{UID}` (el ID del documento debe ser exactamente el UID) con el campo `role`, tipo string, valor `admin`.
+5. Publica `firestore.rules` en Firestore > Reglas.
+6. Publica los archivos en un servidor estático (GitHub Pages o Firebase Hosting). No abras los HTML como `file://`.
 
-## Datos de cada vuelo
-Colección `flights`: `flightNumber`, `airline`, `destination`, `departureTime` (fecha ISO local), `gate`, `status` (`boarding`, `ontime`, `delayed`, `departed`, `cancelled`), `createdAt`, `updatedAt`.
+## Avisos
+Desde `admin.html`, un administrador escribe el título y el mensaje y pulsa **Publicar aviso en pantalla**. El aviso aparece inmediatamente en pantalla completa en `index.html`, incluso en las pantallas que ya estén abiertas. Permanece visible hasta que un administrador pulse **Retirar aviso de pantalla** en el panel. No hay botón de cierre en el panel público. El aviso se guarda en `notices/current` y se sincroniza en tiempo real.
 
-## Roles y seguridad
-El panel comprueba el documento `users/{UID}` y exige que su campo `role` sea la cadena `admin`. Las reglas de Firestore usan esa misma comprobación para autorizar cambios en `flights`. Los usuarios no pueden crear ni modificar documentos de `users` desde la web; asigna los roles manualmente desde Firebase Console, con acceso de propietario/administrador al proyecto. **No permitas que el propio usuario cambie su rol desde el navegador.**
+## Vuelos
+Colección `flights`: `flightNumber`, `airline`, `destination`, `departureTime`, `gate`, `status`, `createdAt`, `updatedAt`.
+
+## Seguridad
+El panel comprueba `users/{UID}.role == "admin"`. Las reglas reservan la escritura de vuelos y avisos a administradores. Los usuarios no pueden modificar documentos de `users` desde el navegador; asigna roles manualmente desde Firebase Console.
