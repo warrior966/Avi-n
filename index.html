@@ -19,6 +19,8 @@
     .table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:720px}th{text-align:left;padding:14px 20px;color:#7891a8;font:10px 'DM Mono',monospace;letter-spacing:1.3px;text-transform:uppercase;background:#0b1a29}td{padding:17px 20px;border-top:1px solid #1a3043;font-size:13px}tbody tr:hover{background:#10263a}.flight{font:600 14px 'DM Mono',monospace;color:var(--cyan)}.time{font:500 18px 'DM Mono',monospace}.destination{font-weight:700}.airline{color:var(--muted);font-size:11px;margin-top:3px}.gate{font:500 14px 'DM Mono',monospace}
     .status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:7px;font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}.status:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}.s-boarding{color:#f7c66b;background:#f7c66b18}.s-ontime{color:#8fdda5;background:#8fdda518}.s-delayed{color:#ff9c82;background:#ff9c8218}.s-departed{color:#8ca8c1;background:#8ca8c118}.s-cancelled{color:#ff8585;background:#ff858518}
     .empty{padding:56px 20px;text-align:center;color:var(--muted);font-size:13px}.empty b{display:block;color:var(--text);font-size:16px;margin-bottom:7px}.foot{display:flex;justify-content:space-between;gap:14px;margin-top:18px;color:#71869a;font-size:10px}.foot a{color:var(--muted);text-decoration:none}.foot a:hover{color:var(--cyan)}
+    .announcement{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:clamp(24px,6vw,80px);background:radial-gradient(ellipse at 50% 0%,#28516b 0,#102a40 45%,#06111d 100%);text-align:center}
+    .announcement[hidden]{display:none}.announcement-inner{width:min(100%,1100px)}.announcement-tag{font:700 13px 'DM Mono',monospace;letter-spacing:4px;text-transform:uppercase;color:#70e4f1;margin-bottom:28px}.announcement h2{font-size:clamp(38px,8vw,100px);line-height:1.04;letter-spacing:-3px;margin:0 0 28px;overflow-wrap:anywhere}.announcement p{font-size:clamp(19px,3vw,34px);line-height:1.5;color:#d3e3ef;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.announcement-mark{font-size:clamp(42px,7vw,76px);margin-bottom:24px}
     @media(max-width:650px){.wrap{padding-top:22px}.top{align-items:flex-start}.clock{font-size:16px}.heading{align-items:flex-start;flex-direction:column}.stats{gap:7px}.stat{padding:13px 11px}.stat span{font-size:9px}.stat strong{font-size:21px}.foot{flex-direction:column}}
   </style>
 </head>
@@ -31,8 +33,8 @@
 </main>
 <script type="module">
 import { db } from './firebase-config.js';
-import { collection, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-const body=document.getElementById('flights');
+import { collection, doc, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+const body=document.getElementById('flights');\nonSnapshot(doc(db,'notices','current'),snapshot=>{const notice=snapshot.exists()?snapshot.data():null;const overlay=document.getElementById('announcement');if(notice&&notice.active===true){document.getElementById('announcementTitle').textContent=notice.title||'Aviso importante';document.getElementById('announcementText').textContent=notice.message||'';overlay.hidden=false}else{overlay.hidden=true}},error=>console.error('Error leyendo avisos:',error));
 const labels={boarding:'Embarcando',ontime:'A tiempo',delayed:'Retrasado',departed:'Despegado',cancelled:'Cancelado'};
 function updateClock(){const now=new Date();document.getElementById('clock').textContent=new Intl.DateTimeFormat('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(now);document.getElementById('today').textContent=new Intl.DateTimeFormat('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now)}
 updateClock();setInterval(updateClock,1000);
