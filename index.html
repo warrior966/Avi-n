@@ -31,6 +31,7 @@
   <section class="board"><div class="board-head"><h3>Próximas salidas</h3><span id="updated">CONECTANDO CON FIREBASE…</span></div><div class="table-wrap"><table><thead><tr><th>Vuelo</th><th>Destino</th><th>Hora</th><th>Puerta</th><th>Estado</th></tr></thead><tbody id="flights"><tr><td colspan="5" class="empty">Conectando con la base de datos…</td></tr></tbody></table></div></section>
   <footer class="foot"><span>Los horarios se muestran en la hora local del dispositivo.</span><a href="admin.html">Acceso de administración ↗</a></footer>
 </main>
+<div id="announcement" class="announcement" hidden role="alert" aria-live="assertive"><div class="announcement-inner"><div class="announcement-mark">✈</div><div class="announcement-tag">Aviso del aeropuerto</div><h2 id="announcementTitle"></h2><p id="announcementText"></p></div></div>
 <script type="module">
 import { db } from './firebase-config.js';
 import { collection, doc, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
